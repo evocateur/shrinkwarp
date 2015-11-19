@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var npa = require('npm-package-arg');
 var spawnSync = require('spawn-sync');
 var traverse = require('traverse');
 
@@ -8,10 +9,7 @@ var load = require('load-json-file');
 var write = require('write-json-file');
 
 var shrinkwrapFile = find.sync('npm-shrinkwrap.json');
-var preserve = traverse(load.sync(shrinkwrapFile)).reduce(preserveGitProps, {
-    from: {},
-    resolved: {}
-});
+var preserved = traverse(load.sync(shrinkwrapFile));
 
 var argv = process.argv.slice(2);
 var result = spawnSync('npm', ['shrinkwrap'].concat(argv), {
@@ -22,38 +20,37 @@ if (result.error) {
     process.exit(result.status);
 }
 
-write.sync(shrinkwrapFile, load.sync(shrinkwrapFile), {
+var data = traverse(load.sync(shrinkwrapFile)).forEach(cleanDeps);
+
+write.sync(shrinkwrapFile, data, {
     sortKeys: depsOnly,
-    replacer: replacer,
     indent: 2
 });
 
-function isGitDep(rep) {
-    return /^git/.test(rep);
-}
-
-function preserveGitProps(map, node) {
+function cleanDeps(node) {
     if (this.parent &&
-        this.parent.key === 'dependencies' &&
-        isGitDep(node.resolved)) {
-        map.from[node.resolved] = node.from;
-        map.resolved[node.from] = node.resolved;
-        map.resolved[node.resolved] = node.resolved;
+        this.parent.key === 'dependencies') {
+        // https://github.com/npm/npm-package-arg#result-object
+        var parsed = npa(node.from);
+        if (parsed.type === 'git' || parsed.type === 'hosted') {
+            // persist correct 'from' value
+            var fromPath = this.path.concat('from');
+            if (node.from === node.resolved && preserved.has(fromPath)) {
+                // npm 2 replaces existing 'from' with 'resolved' value
+                // this is idiotic, and needs to be restored from preserved
+                node.from = preserved.get(fromPath);
+            }
+        } else if (parsed.type === 'remote') {
+            // tarball does not need 'from' if it is identical to 'resolved'
+            if (node.from === node.resolved) {
+                delete node.from;
+            }
+        } else {
+            // remove 'from' and 'resolved' with any other type of dependency
+            delete node.from;
+            delete node.resolved;
+        }
     }
-    return map;
-}
-
-function replacer(key, val) {
-    if (!this.version) {
-        return val;
-    }
-    if (key === "from") {
-        return preserve.from[this.resolved];
-    }
-    if (key === "resolved") {
-        return preserve.resolved[this.from];
-    }
-    return val;
 }
 
 function depsOnly(a, b) {
