@@ -1,26 +1,65 @@
-#!/bin/bash -e
+#!/usr/bin/env node
 
-npm shrinkwrap "$@"
-echo '''
-var fs = require("fs");
-var shrinkwrap = require("./npm-shrinkwrap.json");
+var spawnSync = require('spawn-sync');
+var traverse = require('traverse');
 
-function gitDep(rep) {
+var find = require('find-up');
+var load = require('load-json-file');
+var write = require('write-json-file');
+
+var shrinkwrapFile = find.sync('npm-shrinkwrap.json');
+var preserve = traverse(load.sync(shrinkwrapFile)).reduce(preserveGitProps, {
+    from: {},
+    resolved: {}
+});
+
+var argv = process.argv.slice(2);
+var result = spawnSync('npm', ['shrinkwrap'].concat(argv), {
+    stdio: 'inherit'
+});
+
+if (result.error) {
+    process.exit(result.status);
+}
+
+write.sync(shrinkwrapFile, load.sync(shrinkwrapFile), {
+    sortKeys: depsOnly,
+    replacer: replacer,
+    indent: 2
+});
+
+function isGitDep(rep) {
     return /^git/.test(rep);
+}
+
+function preserveGitProps(map, node) {
+    if (this.parent &&
+        this.parent.key === 'dependencies' &&
+        isGitDep(node.resolved)) {
+        map.from[node.resolved] = node.from;
+        map.resolved[node.from] = node.resolved;
+        map.resolved[node.resolved] = node.resolved;
+    }
+    return map;
 }
 
 function replacer(key, val) {
     if (!this.version) {
         return val;
     }
-    if (key === "from" && !gitDep(this.resolved)) {
-        return undefined;
+    if (key === "from") {
+        return preserve.from[this.resolved];
     }
-    if (key === "resolved" && !gitDep(val) && this.from !== val) {
-        return undefined;
+    if (key === "resolved") {
+        return preserve.resolved[this.from];
     }
     return val;
 }
 
-fs.writeFileSync("./npm-shrinkwrap.json", JSON.stringify(shrinkwrap, replacer, 2));
-''' | node
+function depsOnly(a, b) {
+    if (a.key === 'name' ||
+        a.key === 'version') {
+        return -1;
+    }
+    return a.key > b.key ? 1 : -1;
+}

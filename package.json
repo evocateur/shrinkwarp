@@ -11,5 +11,12 @@
     "shinkwrap"
   ],
   "author": "SkyBet",
-  "license": " BSD-3-Clause"
+  "license": " BSD-3-Clause",
+  "dependencies": {
+    "find-up": "^1.1.0",
+    "load-json-file": "^1.1.0",
+    "spawn-sync": "^1.0.14",
+    "traverse": "^0.6.6",
+    "write-json-file": "^1.2.0"
+  }
 }
