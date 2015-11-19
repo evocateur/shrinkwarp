@@ -12,7 +12,7 @@ var shrinkwrapFile = find.sync('npm-shrinkwrap.json');
 var preserved = traverse(load.sync(shrinkwrapFile));
 
 var argv = process.argv.slice(2);
-var result = spawnSync('npm', ['shrinkwrap'].concat(argv), {
+var result = spawnSync('npm', ['shrinkwrap', '--loglevel=error'].concat(argv), {
     stdio: 'inherit'
 });
 
