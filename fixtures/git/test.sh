@@ -17,5 +17,7 @@ rm -rf node_modules && \
     git diff --no-ext-diff npm-shrinkwrap.json && \
     npm i -S substack/js-traverse#0.6.6 && \
     shonkwrap && \
-    git diff --no-ext-diff npm-shrinkwrap.json
+    git diff --no-ext-diff npm-shrinkwrap.json && \
+    npm rm -S traverse &&
+    git checkout npm-shrinkwrap.json
     # git diff --no-ext-diff --exit-code npm-shrinkwrap.json
