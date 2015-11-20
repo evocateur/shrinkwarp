@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// DEBUG=shonkwrap ./test.sh
+var debug = require('debug')('shonkwrap');
+
 var npa = require('npm-package-arg');
 var spawnSync = require('spawn-sync');
 var traverse = require('traverse');
@@ -8,24 +11,40 @@ var find = require('find-up');
 var load = require('load-json-file');
 var write = require('write-json-file');
 
-var shrinkwrapFile = find.sync('npm-shrinkwrap.json');
-var preserved = traverse(load.sync(shrinkwrapFile));
+var preserved;
 
-var argv = process.argv.slice(2);
-var result = spawnSync('npm', ['shrinkwrap', '--loglevel=error'].concat(argv), {
-    stdio: 'inherit'
-});
+var shrinkwrapFile = find.sync('npm-shrinkwrap.json');
+if (shrinkwrapFile === null) {
+    debug('no existing npm-shrinkwrap.json found, skipping preserved traversal');
+    preserved = traverse({});
+} else {
+    preserved = traverse(load.sync(shrinkwrapFile));
+}
+
+var argv = ['shrinkwrap', '--loglevel=error'].concat(process.argv.slice(2));
+
+debug('executing `npm %s`', argv.join(' '));
+var result = spawnSync('npm', argv, {stdio: 'inherit'});
 
 if (result.error) {
     process.exit(result.status);
 }
 
+if (shrinkwrapFile === null) {
+    debug('finding npm-shrinkwrap.json after initial run');
+    shrinkwrapFile = find.sync('npm-shrinkwrap.json');
+}
+
+debug('cleaning dependency tree');
 var data = traverse(load.sync(shrinkwrapFile)).forEach(cleanDeps);
 
+debug('rewriting clean shrinkwrap');
 write.sync(shrinkwrapFile, data, {
     sortKeys: depsOnly,
     indent: 2
 });
+
+debug('finished');
 
 function cleanDeps(node) {
     if (this.parent &&

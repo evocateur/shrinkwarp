@@ -13,9 +13,10 @@
   "author": "SkyBet",
   "license": " BSD-3-Clause",
   "scripts": {
-    "test": "./test.sh && git clean -fdx fixtures"
+    "test": "DEBUG=shonkwrap ./test.sh && git clean -fdx fixtures"
   },
   "dependencies": {
+    "debug": "^2.2.0",
     "find-up": "^1.1.0",
     "load-json-file": "^1.1.0",
     "npm-package-arg": "^4.1.0",
