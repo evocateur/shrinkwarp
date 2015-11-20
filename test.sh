@@ -20,8 +20,9 @@ echo "using npm version-specific fixtures dir: ${NPM_FIXTURE}"
 # then upgrade new git dep
 
 clean_run() {
-    rm -rf node_modules && \
-        git checkout package.json npm-shrinkwrap.json && \
+    pushd "$1" && \
+        git clean -fdx && \
+        git checkout . && \
         npm i . && \
         ${ROOTDIR}/shonkwrap && \
         git diff --no-ext-diff --exit-code npm-shrinkwrap.json
@@ -33,9 +34,9 @@ clean_run() {
 }
 
 manual_diffs() {
-    cd "${NPM_FIXTURE}/git"
-    rm -rf node_modules && \
-        git checkout package.json npm-shrinkwrap.json && \
+    pushd "$1" && \
+        git clean -fdx && \
+        git checkout . && \
         npm i . && \
         ${ROOTDIR}/shonkwrap && \
         git diff --no-ext-diff --quiet npm-shrinkwrap.json && \
@@ -51,9 +52,9 @@ manual_diffs() {
 }
 
 if [ "$1" = "manual" ]; then
-    manual_diffs
+    manual_diffs "${NPM_FIXTURE}/git"
 else
-    pushd "${NPM_FIXTURE}/git" && clean_run && \
-    pushd "${ROOTDIR}/fixtures/simple" && clean_run && \
-    pushd "${ROOTDIR}/fixtures/tarball" && clean_run
+    clean_run "${ROOTDIR}/fixtures/simple" && \
+    clean_run "${ROOTDIR}/fixtures/tarball" && \
+    clean_run "${NPM_FIXTURE}/git"
 fi
