@@ -1,5 +1,7 @@
 # shrinkwarp
 
+[![Build Status](https://travis-ci.org/evocateur/shrinkwarp.svg?branch=master)](https://travis-ci.org/evocateur/shrinkwarp)
+
 A script that makes updating `npm-shrinkwrap.json` more deterministic,
 which helps avoid the madness of the stock `npm shrinkwrap` experience.
 
