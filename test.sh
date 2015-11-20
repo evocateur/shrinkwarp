@@ -4,15 +4,14 @@ CDPATH="" # nuked to avoid wonkiness
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 EXIT_STATUS="0"
 
-npm --version
+echo "node @ $(node --version)"
 
 NPM_VERSION=$(npm --version)
-NPM_VERSION="${NPM_VERSION%%.*}"
+echo "npm @ ${NPM_VERSION}"
 
-NPM_FIXTURE="${ROOTDIR}/fixtures/${NPM_VERSION}.x"
-echo "using npm version-specific fixtures dir: ${NPM_FIXTURE}"
-
-# git checkout npm-shrinkwrap.json && shonkwrap && git diff npm-shrinkwrap.json
+NPM_FIXTURE="${ROOTDIR}/fixtures/${NPM_VERSION%%.*}.x"
+echo "npm version-specific fixtures dir: ${NPM_FIXTURE}"
+echo
 
 # clean install
 # re-rerun, no changes
