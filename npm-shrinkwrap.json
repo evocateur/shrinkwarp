@@ -1,6 +1,6 @@
 {
   "name": "shrinkwarp",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "dependencies": {
     "debug": {
       "version": "2.2.0",
