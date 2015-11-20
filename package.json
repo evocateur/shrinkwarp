@@ -13,7 +13,7 @@
   "author": "SkyBet",
   "license": " BSD-3-Clause",
   "scripts": {
-    "test": "./test.sh"
+    "test": "./test.sh && git clean -fdx fixtures"
   },
   "dependencies": {
     "find-up": "^1.1.0",
