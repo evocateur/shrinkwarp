@@ -18,7 +18,17 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "prepublish": "not-in-install && npm test || in-install",
+    "pretest": "eslint bin lib",
     "test": "DEBUG=shrinkwarp ./test/run.sh && git clean -fdx test/fixtures"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "root": true
   },
   "dependencies": {
     "debug": "^2.2.0",
@@ -30,6 +40,7 @@
     "write-json-file": "^1.2.0"
   },
   "devDependencies": {
+    "eslint": "^1.10.0",
     "in-publish": "^2.0.0"
   }
 }
