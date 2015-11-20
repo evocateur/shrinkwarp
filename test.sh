@@ -2,7 +2,7 @@
 
 CDPATH="" # nuked to avoid wonkiness
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
-EXIT_STATUS=0
+EXIT_STATUS="0"
 
 # git checkout npm-shrinkwrap.json && shonkwrap && git diff npm-shrinkwrap.json
 
@@ -18,7 +18,10 @@ clean_run() {
         ${ROOTDIR}/shonkwrap && \
         git diff --no-ext-diff --exit-code npm-shrinkwrap.json
 
-    EXIT_STATUS=$?
+    EXIT_STATUS="$?"
+    if [ "$EXIT_STATUS" -ne "0" ]; then
+        exit $EXIT_STATUS
+    fi
 }
 
 manual_diffs() {
