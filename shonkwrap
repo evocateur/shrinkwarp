@@ -49,6 +49,8 @@ debug('finished');
 function cleanDeps(node) {
     if (this.parent &&
         this.parent.key === 'dependencies') {
+        debug('cleaning node "%s"', this.key);
+        debug(node);
         // https://github.com/npm/npm-package-arg#result-object
         var parsed = npa(node.from);
         if (parsed.type === 'git' || parsed.type === 'hosted') {

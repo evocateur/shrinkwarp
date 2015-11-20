@@ -1,0 +1,23 @@
+{
+  "name": "git",
+  "version": "1.0.0",
+  "dependencies": {
+    "abbrev": {
+      "version": "1.0.7"
+    },
+    "async": {
+      "version": "1.4.2",
+      "from": "caolan/async#v1.4.2",
+      "resolved": "git://github.com/caolan/async.git#92f78aebad222d60c13e4299c0e723f2fe2d6611"
+    },
+    "nopt": {
+      "version": "3.0.6"
+    },
+    "pinkie": {
+      "version": "2.0.1"
+    },
+    "pinkie-promise": {
+      "version": "2.0.0"
+    }
+  }
+}
