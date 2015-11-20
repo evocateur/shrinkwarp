@@ -2,6 +2,7 @@
 
 // DEBUG=shonkwrap ./test.sh
 var debug = require('debug')('shonkwrap');
+debug('starting in %s', process.cwd());
 
 var npa = require('npm-package-arg');
 var spawnSync = require('spawn-sync');
