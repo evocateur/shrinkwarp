@@ -13,6 +13,7 @@
   "author": "SkyBet",
   "license": " BSD-3-Clause",
   "scripts": {
+    "pretest": "git clean -fdx fixtures",
     "test": "DEBUG=shonkwrap ./test.sh && git clean -fdx fixtures"
   },
   "dependencies": {
