@@ -1,20 +1,20 @@
 {
-  "name": "shonkwrap",
-  "version": "1.3.0",
-  "description": "npm shrinkwrap without the noise",
+  "name": "shrinkwarp",
+  "version": "0.0.0",
+  "description": "deterministic npm shrinkwrap",
   "repository": {
     "type": "git",
-    "url": "git@github.com:skybet/shonkwrap.git"
+    "url": "git@github.com:evocateur/shrinkwarp.git"
   },
-  "bin": "./shonkwrap",
-  "files": ["shonkwrap"],
+  "bin": "bin/shrinkwarp",
+  "files": ["bin", "lib"],
   "keywords": [
     "shinkwrap"
   ],
-  "author": "SkyBet",
-  "license": " BSD-3-Clause",
+  "author": "Daniel Stockman",
+  "license": "BSD-3-Clause",
   "scripts": {
-    "test": "DEBUG=shonkwrap ./test.sh && git clean -fdx fixtures"
+    "test": "DEBUG=shrinkwarp ./test/run.sh && git clean -fdx test/fixtures"
   },
   "dependencies": {
     "debug": "^2.2.0",

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 CDPATH="" # nuked to avoid wonkiness
-ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
+ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." > /dev/null && pwd)"
+TEST_FIXTURES="${ROOTDIR}/test/fixtures"
 EXIT_STATUS="0"
 
 echo "node @ $(node --version)"
@@ -9,7 +10,7 @@ echo "node @ $(node --version)"
 NPM_VERSION=$(npm --version)
 echo "npm @ ${NPM_VERSION}"
 
-NPM_FIXTURE="${ROOTDIR}/fixtures/${NPM_VERSION%%.*}.x"
+NPM_FIXTURE="${TEST_FIXTURES}/${NPM_VERSION%%.*}.x"
 echo "npm version-specific fixtures dir: ${NPM_FIXTURE}"
 echo
 
@@ -23,7 +24,7 @@ clean_run() {
         git clean -fdx && \
         git checkout . && \
         npm i . && \
-        ${ROOTDIR}/shonkwrap && \
+        ${ROOTDIR}/bin/shrinkwarp && \
         git diff --no-ext-diff --exit-code npm-shrinkwrap.json
 
     EXIT_STATUS="$?"
@@ -37,13 +38,13 @@ manual_diffs() {
         git clean -fdx && \
         git checkout . && \
         npm i . && \
-        ${ROOTDIR}/shonkwrap && \
+        ${ROOTDIR}/bin/shrinkwarp && \
         git diff --no-ext-diff --quiet npm-shrinkwrap.json && \
         npm i -S substack/js-traverse#0.6.5 && \
-        ${ROOTDIR}/shonkwrap && \
+        ${ROOTDIR}/bin/shrinkwarp && \
         git diff --no-ext-diff npm-shrinkwrap.json && \
         npm i -S substack/js-traverse#0.6.6 && \
-        ${ROOTDIR}/shonkwrap && \
+        ${ROOTDIR}/bin/shrinkwarp && \
         git diff --no-ext-diff npm-shrinkwrap.json && \
         npm rm -S traverse &&
         git checkout npm-shrinkwrap.json
@@ -53,7 +54,7 @@ manual_diffs() {
 if [ "$1" = "manual" ]; then
     manual_diffs "${NPM_FIXTURE}/git"
 else
-    clean_run "${ROOTDIR}/fixtures/simple" && \
-    clean_run "${ROOTDIR}/fixtures/tarball" && \
+    clean_run "${TEST_FIXTURES}/simple" && \
+    clean_run "${TEST_FIXTURES}/tarball" && \
     clean_run "${NPM_FIXTURE}/git"
 fi
