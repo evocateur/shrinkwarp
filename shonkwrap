@@ -26,7 +26,8 @@ var argv = ['shrinkwrap', '--loglevel=error'].concat(process.argv.slice(2));
 debug('executing `npm %s`', argv.join(' '));
 var result = spawnSync('npm', argv, {stdio: 'inherit'});
 
-if (result.error) {
+if (result.status) {
+    debug('execution returned non-zero status %d', result.status);
     process.exit(result.status);
 }
 
