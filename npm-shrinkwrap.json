@@ -47,6 +47,14 @@
         }
       }
     },
+    "nopt": {
+      "version": "3.0.6",
+      "dependencies": {
+        "abbrev": {
+          "version": "1.0.7"
+        }
+      }
+    },
     "npm-package-arg": {
       "version": "4.1.0",
       "dependencies": {
