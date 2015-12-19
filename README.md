@@ -41,3 +41,38 @@ When you'd normally type `npm shrinkwrap`, type `npm run shrinkwrap` instead.
 npm i -S foo-module && npm run shrinkwrap
 npm test && git commit -am "add foo-module"
 ```
+
+## Options
+
+Aside from `--dev`, which is passed through to `npm`,
+you can also pass options specific to `shrinkwarp`.
+
+### `--ignore <module>`
+
+In some cases, you just don't want an optional module shrinkwrapped.
+Often, it is due to platform-specific extensions that break builds when run on an incompatible platform.
+`npm` does fine with allowing optional dependencies to fail on incompatible platforms,
+but it falls down *hard* when those same dependencies are part of the shrinkwrap.
+
+This option will avoid all that pain.
+Please use sparingly,
+as it is a global block list.
+
+```json
+"scripts": {
+  "shrinkwrap": "shrinkwarp --dev --ignore fsevents"
+}
+```
+
+To pass any options *other* than `--dev` to `npm`,
+use the `--` syntax:
+
+```sh
+shrinkwarp -- --registry=http://my-registry.com/
+```
+
+```json
+"scripts": {
+  "shrinkwrap": "shrinkwarp --ignore fsevents -- --loglevel=silly"
+}
+```
