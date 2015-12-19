@@ -20,7 +20,7 @@
   "scripts": {
     "prepublish": "not-in-install && npm test || in-install",
     "pretest": "eslint bin lib",
-    "test": "DEBUG=shrinkwarp ./test/run.sh && git clean -fdx test/fixtures"
+    "test": "DEBUG=shrinkwarp:* ./test/run.sh && git clean -fdx test/fixtures"
   },
   "eslintConfig": {
     "env": {
