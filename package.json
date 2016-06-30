@@ -37,7 +37,6 @@
     "load-json-file": "^1.1.0",
     "nopt": "^3.0.6",
     "npm-package-arg": "^4.1.0",
-    "spawn-sync": "^1.0.14",
     "traverse": "^0.6.6",
     "write-json-file": "^1.2.0"
   },
