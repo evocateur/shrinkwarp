@@ -42,7 +42,7 @@
     "write-json-file": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "^1.10.0",
+    "eslint": "^2.13.1",
     "in-publish": "^2.0.0"
   }
 }
