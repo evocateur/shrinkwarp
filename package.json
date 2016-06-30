@@ -34,11 +34,11 @@
   "dependencies": {
     "debug": "^2.2.0",
     "find-up": "^1.1.0",
-    "load-json-file": "^1.1.0",
+    "load-json-file": "^2.0.0",
     "nopt": "^3.0.6",
     "npm-package-arg": "^4.1.0",
     "traverse": "^0.6.6",
-    "write-json-file": "^1.2.0"
+    "write-json-file": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^2.13.1",
