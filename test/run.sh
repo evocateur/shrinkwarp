@@ -23,12 +23,13 @@ NPM_SHRINKWRAP="npm shrinkwrap"
 # then upgrade new git dep
 
 clean_run() {
+    echo "Testing command '$1' in directory '$2'"
     # clean_run COMMAND IN_DIR
     pushd "$2" && \
         git clean -fdx . && \
         git checkout . && \
         npm i . && \
-        "$1" && \
+        $1 && \
         git diff --no-ext-diff --exit-code npm-shrinkwrap.json expected.json
 
     EXIT_STATUS="$?"
@@ -58,11 +59,11 @@ manual_diffs() {
 if [ "$1" = "manual" ]; then
     manual_diffs "${NPM_FIXTURE}/git"
 else
-    clean_run $SHRINKWARP_BIN "${TEST_FIXTURES}/simple" && \
-    clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/simple" && \
-    clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/tarball" && \
-    clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/init" && \
-    clean_run $SHRINKWARP_BIN "${TEST_FIXTURES}/init" && \
+    clean_run "$SHRINKWARP_BIN" "${TEST_FIXTURES}/simple" && \
+    clean_run "$NPM_SHRINKWRAP" "${TEST_FIXTURES}/simple" && \
+    clean_run "$NPM_SHRINKWRAP" "${TEST_FIXTURES}/tarball" && \
+    clean_run "$NPM_SHRINKWRAP" "${TEST_FIXTURES}/init" && \
+    clean_run "$SHRINKWARP_BIN" "${TEST_FIXTURES}/init" && \
     echo "IGNORING GIT FOR NOW"
     # clean_run $NPM_SHRINKWRAP "${NPM_FIXTURE}/git"
 fi
