@@ -22,6 +22,10 @@
     "pretest": "eslint bin lib",
     "test": "DEBUG=shrinkwarp:* ./test/run.sh"
   },
+  "engines": {
+    "npm": ">=3.10.7",
+    "node": ">=4"
+  },
   "eslintConfig": {
     "env": {
       "node": true

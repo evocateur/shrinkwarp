@@ -18,34 +18,46 @@ which provides a great experience for `npm` 3.x users.
 
 # Install
 
+**WARNING:** Version 2 of this package is intended for `npm` v3.10.7 and above.
+If you are still using `npm@2`,
+you can continue using version [1.x][] of this package.
+
 ```sh
 npm install --save-dev shrinkwarp
 ```
 
-Add a shrinkwrap task to your `package.json` scripts hash:
+Add a `postshrinkwrap` lifecycle script to your `package.json` scripts hash:
 
 ```json
 "scripts": {
-  "shrinkwrap": "shrinkwarp"
+  "postshrinkwrap": "shrinkwarp"
 }
 ```
 
-If you need to shrinkwrap `devDependencies` as well,
-simply add `--dev` to the execution above.
-
 # Usage
 
-When you'd normally type `npm shrinkwrap`, type `npm run shrinkwrap` instead.
+With the lifecycle script configured,
+just use `npm shrinkwrap` normally.
+With recent versions of `npm` 3.x,
+it will auto-shrinkwrap when passing the `--save`/`-S` flag to `npm install`.
 
 ```sh
-npm i -S foo-module && npm run shrinkwrap
-npm test && git commit -am "add foo-module"
+npm i -S foo-module
+npm test
+git commit -am "add foo-module"
+```
+
+However, installing a dev dependency (with `--save-dev`/`-D`)
+will still require a separate call to `npm shrinkwrap --dev`.
+
+```sh
+npm i -D foo-dev-module
+npm shrinkwrap --dev
+npm test
+git commit -am "add foo-dev-module"
 ```
 
 ## Options
-
-Aside from `--dev`, which is passed through to `npm`,
-you can also pass options specific to `shrinkwarp`.
 
 ### `--ignore <module>`
 
@@ -60,19 +72,21 @@ as it is a global block list.
 
 ```json
 "scripts": {
-  "shrinkwrap": "shrinkwarp --dev --ignore fsevents"
+  "postshrinkwrap": "shrinkwarp --ignore fsevents"
 }
 ```
 
-To pass any options *other* than `--dev` to `npm`,
-use the `--` syntax:
+To ignore multiple modules,
+pass multiple flags:
 
 ```sh
-shrinkwarp -- --registry=http://my-registry.com/
+shrinkwarp --ignore fsevents --ignore otherthing
 ```
 
 ```json
 "scripts": {
-  "shrinkwrap": "shrinkwarp --ignore fsevents -- --loglevel=silly"
+  "postshrinkwrap": "shrinkwarp --ignore fsevents --ignore otherthing"
 }
 ```
+
+[1.x]: https://github.com/evocateur/shrinkwarp/tree/v1.2.0#install
