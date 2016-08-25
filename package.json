@@ -18,8 +18,6 @@
   "author": "Daniel Stockman",
   "license": "BSD-3-Clause",
   "scripts": {
-    "preshrinkwrap": "npm prune --production",
-    "postshrinkwrap": "echo npm install --cache-min=Infinity",
     "prepublish": "not-in-install && npm test || in-install",
     "pretest": "eslint bin lib",
     "test": "git clean -fdx test/fixtures && DEBUG=shrinkwarp:* ./test/run.sh"
