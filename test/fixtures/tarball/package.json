@@ -1,7 +1,13 @@
 {
-  "name": "git",
+  "name": "tarball",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "postshrinkwrap": "shrinkwarp"
+  },
+  "devDependencies": {
+    "shrinkwarp": "../../.."
+  },
   "dependencies": {
     "async": "https://github.com/caolan/async/archive/v1.4.2.tar.gz"
   }

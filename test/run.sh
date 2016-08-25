@@ -14,18 +14,22 @@ NPM_FIXTURE="${TEST_FIXTURES}/${NPM_VERSION%%.*}.x"
 echo "npm version-specific fixtures dir: ${NPM_FIXTURE}"
 echo
 
+SHRINKWARP_BIN="${ROOTDIR}/bin/shrinkwarp"
+NPM_SHRINKWRAP="npm shrinkwrap"
+
 # clean install
 # re-rerun, no changes
 # then install new git dep
 # then upgrade new git dep
 
 clean_run() {
-    pushd "$1" && \
-        git clean -fdx && \
+    # clean_run COMMAND IN_DIR
+    pushd "$2" && \
+        git clean -fdx . && \
         git checkout . && \
         npm i . && \
-        ${ROOTDIR}/bin/shrinkwarp && \
-        git diff --no-ext-diff --exit-code npm-shrinkwrap.json
+        "$1" && \
+        git diff --no-ext-diff --exit-code npm-shrinkwrap.json expected.json
 
     EXIT_STATUS="$?"
     if [ "$EXIT_STATUS" -ne "0" ]; then
@@ -38,13 +42,13 @@ manual_diffs() {
         git clean -fdx && \
         git checkout . && \
         npm i . && \
-        ${ROOTDIR}/bin/shrinkwarp && \
+        $SHRINKWARP_BIN && \
         git diff --no-ext-diff --quiet npm-shrinkwrap.json && \
         npm i -S substack/js-traverse#0.6.5 && \
-        ${ROOTDIR}/bin/shrinkwarp && \
+        $SHRINKWARP_BIN && \
         git diff --no-ext-diff npm-shrinkwrap.json && \
         npm i -S substack/js-traverse#0.6.6 && \
-        ${ROOTDIR}/bin/shrinkwarp && \
+        $SHRINKWARP_BIN && \
         git diff --no-ext-diff npm-shrinkwrap.json && \
         npm rm -S traverse &&
         git checkout npm-shrinkwrap.json
@@ -54,8 +58,9 @@ manual_diffs() {
 if [ "$1" = "manual" ]; then
     manual_diffs "${NPM_FIXTURE}/git"
 else
-    clean_run "${TEST_FIXTURES}/simple" && \
-    clean_run "${TEST_FIXTURES}/tarball" && \
+    clean_run $SHRINKWARP_BIN "${TEST_FIXTURES}/simple" && \
+    clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/simple" && \
+    clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/tarball" && \
     echo "IGNORING GIT FOR NOW"
-    # clean_run "${NPM_FIXTURE}/git"
+    # clean_run $NPM_SHRINKWRAP "${NPM_FIXTURE}/git"
 fi
