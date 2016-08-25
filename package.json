@@ -1,6 +1,6 @@
 {
   "name": "shrinkwarp",
-  "version": "2.0.0-1",
+  "version": "2.0.0",
   "description": "deterministic npm shrinkwrap",
   "repository": {
     "type": "git",
