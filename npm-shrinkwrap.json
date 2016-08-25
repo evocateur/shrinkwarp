@@ -62,6 +62,9 @@
     "pinkie-promise": {
       "version": "2.0.1"
     },
+    "pkg-dir": {
+      "version": "1.0.0"
+    },
     "semver": {
       "version": "5.2.0"
     },
