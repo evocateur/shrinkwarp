@@ -1,0 +1,14 @@
+{
+  "name": "init",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postshrinkwrap": "shrinkwarp"
+  },
+  "devDependencies": {
+    "shrinkwarp": "../../.."
+  },
+  "dependencies": {
+    "async": "1.4.2"
+  }
+}

@@ -61,6 +61,8 @@ else
     clean_run $SHRINKWARP_BIN "${TEST_FIXTURES}/simple" && \
     clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/simple" && \
     clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/tarball" && \
+    clean_run $NPM_SHRINKWRAP "${TEST_FIXTURES}/init" && \
+    clean_run $SHRINKWARP_BIN "${TEST_FIXTURES}/init" && \
     echo "IGNORING GIT FOR NOW"
     # clean_run $NPM_SHRINKWRAP "${NPM_FIXTURE}/git"
 fi
