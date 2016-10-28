@@ -34,6 +34,14 @@ Add a `postshrinkwrap` lifecycle script to your `package.json` scripts hash:
 }
 ```
 
+**WARNING** on npm v3.10.8 and below (eg node 6.9.1) you'll need to use:
+
+```json
+"scripts": {
+  "postshrinkwrap": "cd $(npm prefix) && $(npm bin)/shrinkwarp"
+}
+```
+
 # Usage
 
 With the lifecycle script configured,
